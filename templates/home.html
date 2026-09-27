@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<div class="home-container">
+
+    <h1>Welcome to Social Media Platform</h1>
+
+    <p>Connect, share and interact with people.</p>
+
+    <div class="home-buttons">
+        <a href="/create-post" class="btn">Create Post</a>
+        <a href="/profile" class="btn">My Profile</a>
+    </div>
+
+    <div class="posts-section">
+
+        <h2>Recent Posts</h2>
+
+        {% if posts %}
+
+            {% for post in posts %}
+
+                <div class="post-card">
+
+                    <h3>{{ post.author.username }}</h3>
+
+                    <p>{{ post.content }}</p>
+
+                    {% if post.tags %}
+    <p>🏷️ {{ post.tags }}</p>
+{% endif %}
+
+                   {% if post.image %}
+    {% if post.image.endswith('.mp4') or post.image.endswith('.webm') or post.image.endswith('.ogg') %}
+        <video width="300" controls>
+            <source src="{{ url_for('uploaded_file', filename=post.image) }}">
+        </video>
+    {% else %}
+        <img src="{{ url_for('uploaded_file', filename=post.image) }}" alt="Post image" width="300">
+    {% endif %}
+{% endif %}
+
+                    <small>{{ post.created_at }}</small>
+
+                    <form method="POST" action="/delete/{{ post.id }}">
+    <button type="submit">Delete</button>
+</form>
+
+                    <form method="POST" action="/like/{{ post.id }}">
+    <button type="submit" class="like-btn">❤️ Like</button>
+</form>
+
+<p class="like-count">
+    ❤️ {{ post.likes|length }} Like
+</p>
+
+<form method="POST" action="/comment/{{ post.id }}" class="comment-form">
+
+    <input
+        type="text"
+        name="content"
+        placeholder="Write a comment..."
+        required
+    >
+
+    <button type="submit">Comment</button>
+
+</form>
+
+<div class="comments-section">
+
+    {% for comment in post.comments %}
+
+        <div class="comment">
+            <strong>{{ comment.user.username }}</strong>
+            <span>{{ comment.content }}</span>
+        </div>
+
+    {% endfor %}
+
+</div>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <p>No posts yet. Create your first post!</p>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

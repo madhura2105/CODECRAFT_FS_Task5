@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Create Post{% endblock %}
+
+{% block content %}
+
+<div class="create-post-container">
+
+    <h1>Create Post</h1>
+
+    <form method="POST" enctype="multipart/form-data">
+
+        <label>What's on your mind?</label>
+
+        <textarea
+            name="content"
+            placeholder="Write your post..."
+            rows="6"
+            required
+        ></textarea>
+        <input type="text" name="tags" placeholder="@username">
+        <input type="file" name="image" accept="image/*,video/*">
+
+        <button type="submit">Publish Post</button>
+
+    </form>
+
+    <a href="/" class="back-home">Back to Home</a>
+
+</div>
+
+{% endblock %}
